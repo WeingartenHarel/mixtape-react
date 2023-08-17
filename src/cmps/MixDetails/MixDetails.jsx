@@ -97,7 +97,7 @@ const MixDetails = () => {
       toggleShowHideAll(false)
       return
     }
-
+ 
     // update mix
     saveUpdateMixAndEmit(currentMixCopy)
     // dispatch(updateMix(currentMixCopy))

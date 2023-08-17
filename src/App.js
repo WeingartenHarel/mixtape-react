@@ -36,6 +36,7 @@ const router = createBrowserRouter([
     path: "/mix",
     element: (
       <div>
+         <Header />
         <Mixdetails />
         <Player />
       </div>
@@ -45,6 +46,7 @@ const router = createBrowserRouter([
     path: "/mix:mixId",
     element: (
       <div>
+        <Header />
         <Mixdetails />
         <Player />
       </div>

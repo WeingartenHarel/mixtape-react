@@ -6,7 +6,7 @@ import ListDrag from '../ListDrag/ListDrag'
 import ApiSearch from '../ApiSearch/ApiSearch'
 import { setCurrentMixById, setCurrentMix, getMix, saveMix, updateMix, setMixNew, updateCurrentMix, saveUpdateMix } from '../../store/slices/mixSlice'
 import Search from '../../Assets/search.svg'
-
+ 
 const MixSongs = ({ currentMix }) => {
   const dispatch = useDispatch();
   const socket = useContext(SocketContext);

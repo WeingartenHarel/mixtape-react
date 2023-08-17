@@ -94,6 +94,7 @@
             padding: 0 30px 0 0px;
             align-items: baseline;
             margin-bottom: 100px;
+            padding-bottom: 40px;
             @include niceScrollBar(5px, #be1e2d);
 
             li.songs-details {
