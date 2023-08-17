@@ -1,0 +1,218 @@
+.mix-chat{
+    font-family: Arial;
+    font-size: 1rem;
+    width: 80%;
+    max-width: 500px;
+    display: flex;
+    height: 500px;
+    margin-left: 40px;
+    background: url(https://res.cloudinary.com/hw-projects/image/upload/v1607017740/appmixes/chatbg.jpg);
+    border-radius: 15px 15px 0 0;
+    position: fixed;
+    right: 75px;
+    bottom: 45px;
+    overflow: hidden;
+    box-shadow: 0 0 18px #43434380;
+
+
+    @include for-wide-layout {
+    display: block;
+    position: relative;
+    top: initial;
+    bottom: initial;
+    flex-direction: row;
+    width: 23%;
+    font-family: Arial;
+    font-size: 1rem;
+    width: 30%;
+    display: flex;
+    height: 70vh;
+    margin-left: 40px;
+    background: url(https://res.cloudinary.com/hw-projects/image/upload/v1607017740/appmixes/chatbg.jpg);
+    border-radius: 15px;
+    visibility: visible;
+   
+    // box-shadow: 0 1px 1px rgba(0,0,0,0.62), 
+    //           0 2px 2px rgba(0,0,0,0.62), 
+    //           0 4px 4px rgba(0,0,0,0.62), 
+    //           0 8px 8px rgba(0,0,0,0.62),
+    //           0 16px 16px rgba(0,0,0,0.62);
+    } 
+
+    .marquee-text-wrap{
+        max-width: 480px;
+        overflow: hidden;
+    }
+    .chat-app{
+        height:100%;
+        display:flex;
+        flex-direction: column;
+        // justify-content: space-between;
+        // justify-content: space-between;
+        color:white;
+        .now-playing{
+            color: rgb(255, 255, 255);
+            font-weight: bold;
+            margin-top:2rem;
+            span{
+                color:red;
+            }
+        }
+    }
+    .chat-msgs{
+        overflow-y:auto;
+        @include niceScrollBar(5px , #BE1E2D);
+        display: flex;
+        padding:1rem;
+        
+        
+        ul li{
+            list-style: none;
+            display: flex;
+            justify-content: flex-start;
+            margin-bottom:1rem;
+            
+            p{
+                max-width:390px;
+                overflow:hidden;
+                word-wrap: break-word;
+                
+            }
+        }
+        .reply-to{
+            margin-right: 5px;
+        }
+        .reply-button{
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: #BE1E2D;
+            border: none;
+            margin-left: 5px;
+            padding: 1px 3px;
+            border-radius: 20px;
+        }
+        .reply-img{
+            width:20px;
+            height: 20px;
+        }
+        .active{
+            background: #52a222;
+        }
+    }
+    .chat-form{
+        overflow:auto;
+        form{
+            overflow:auto;
+            display: flex;
+            flex-direction: row;
+            position: absolute;
+            bottom: 0;
+        width:100%;
+            input{
+                position: relative;
+                width: 100%;
+                font-size: 1rem;
+                padding: 10px;
+                border-radius: 0px;
+            }
+
+            .emojis{
+                font-size: 1.4em;
+                outline: none;
+                border: 1px solid #fff; 
+                cursor: pointer; 
+            }
+
+            button{
+                background: no-repeat;
+                border: none;
+                padding: 10px;
+                padding-left: 0;
+                background-color: #fff;
+                width:20%;
+                font-size:1.5rem;
+                outline: none;
+                img{
+                    width: 30px;
+                    height: auto;
+                }
+            }
+        }
+        .some-typing{
+            position: absolute;
+            bottom:80px;
+            
+            left:35%;
+        }
+    }
+}
+
+// .effect5
+// {
+// //   position: relative;
+// }
+.effect5:before, .effect5:after
+{
+  z-index: -1;
+  position: absolute;
+  content: "";
+  bottom: 25px;
+  left: 10px;
+  width: 50%;
+  top: 80%;
+  max-width:300px;
+  background: rgb(0, 0, 0);
+  -webkit-box-shadow: 0 35px 20px #000;
+  -moz-box-shadow: 0 35px 20px rgb(0, 0, 0);
+  box-shadow: 0 35px 20px  #000;
+  -webkit-transform: rotate(-14deg);
+  -moz-transform: rotate(-14deg);
+  -o-transform: rotate(-14deg);
+  -ms-transform: rotate(-14deg);
+  transform: rotate(-14deg);
+}
+
+.effect5:after
+{
+  -webkit-transform: rotate(14deg);
+  -moz-transform: rotate(14deg);
+  -o-transform: rotate(14deg);
+  -ms-transform: rotate(14deg);
+  transform: rotate(14deg);
+  right: 10px;
+  left: auto;
+}
+
+.raised {
+    -webkit-box-shadow: 0 15px 10px -10px rgba(0, 0, 0, 0.5) , 0 1px 4px rgba(0, 0, 0, 0.3) , 0 0 40px rgba(0, 0, 0, 0.1) inset;
+  -mox-box-shadow: 0 15px 10px -10px rgba(0, 0, 0, 0.5) , 0 1px 4px rgba(0, 0, 0, 0.3) , 0 0 40px rgba(0, 0, 0, 0.1) inset;
+  box-shadow: 0 15px 10px -10px rgba(0, 0, 0, 0.5) , 0 1px 4px rgba(0, 0, 0, 0.3) , 0 0 40px rgba(0, 0, 0, 0.1) inset;
+
+}
+
+.title-width{
+    width:20%;
+}
+
+.setUser{
+    position: absolute;
+    width:100%;
+    input{
+        width:100%;
+        border-radius: 3px;
+    }
+}
+
+.msg-color{
+    color:green;
+}
+.gif{
+    width:200px;
+}
+
+.gif-select{
+    outline: none;
+    border:1px solid rgb(216, 216, 216);
+}
+

@@ -1,0 +1,50 @@
+
+@mixin for-mobile-layout {
+    @media (max-width: $break-narrow) {
+      @content;
+    }
+  }
+  
+  @mixin for-narrow-layout {
+    @media (min-width: $break-narrow) {
+      @content;
+    }
+  }
+  
+  @mixin for-normal-layout {
+    @media (min-width: $break-normal) {
+      @content;
+    }
+  }
+  
+  @mixin for-wide-layout {
+    @media (min-width: $break-wide) {
+      @content;
+    }
+  }
+
+  // LAYOUT BREAKPOINTS
+
+$break-narrow: 500px;
+$break-normal: 720px;
+$break-wide: 960px;
+
+/* use
+   @include for-mobile-layout {
+       
+    }
+*/
+@mixin niceScrollBar($width, $color) {
+    &::-webkit-scrollbar {
+        width: $width;
+    }
+    &::-webkit-scrollbar-track {
+        background: #f1f1f1;
+    }
+    &::-webkit-scrollbar-thumb {
+        background: $color;
+    }
+    &::-webkit-scrollbar-thumb:hover {
+        background: darken($color, 5);
+    }
+}

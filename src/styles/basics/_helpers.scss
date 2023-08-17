@@ -1,0 +1,38 @@
+
+.flex{
+    display: flex;
+}
+.flex.column{
+flex-direction: column;
+}
+.flex.space-between{
+justify-content: space-between;
+}
+.flex.space-evenly{
+justify-content: space-evenly;
+}
+.flex.space-around{
+justify-content: space-around;
+}
+.flex.start{
+justify-content: flex-start;
+}
+.flex.center{
+justify-content: center;
+}
+.flex.end{
+justify-content: flex-end;
+}
+.flex.grow{
+flex-grow: 1;
+}
+.centered {
+    position: fixed;
+    left: 50%;
+    transform: translate(-50%, 0);
+    z-index: 99;
+}
+.err{
+    color:red;
+    font-size: 16px;
+}

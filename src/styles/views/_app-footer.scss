@@ -1,0 +1,40 @@
+
+
+.app-footer{
+    border-top: 1px solid #ffffff30;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 30px;
+    margin-top: 60px;
+    margin-bottom: 90px;
+    gap: 20px;
+    color: aliceblue;
+    .logo{
+
+        img{
+            width: 60px;
+            height: auto;
+        }
+    }
+
+    h2{
+        color: $white-color;
+        font-size: 1em;
+        display: flex;
+        flex-direction: column;
+        gap: 40px;
+        @include for-wide-layout {
+            flex-direction: row;
+        }
+    }
+
+
+
+    flex-direction: column;
+    // background-color: rgb(32, 34, 36);
+    // padding:1rem;
+    // position: fixed;
+    // bottom:0;
+    // width:100%;
+}

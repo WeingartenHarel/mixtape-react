@@ -1,0 +1,41 @@
+.el-carousel__container {
+    height: 70vh !important;
+    width: auto;
+    position: relative;
+
+    img {
+        position: absolute;
+        object-fit: cover;
+        width: 120%;
+        height: 100%;
+    }
+}
+
+iframe#widget2{
+    color:pink
+    
+    html{
+        color:pink
+    }
+}
+
+video#myVideo {
+    object-fit: fill;
+    width: 100%;
+    height: auto;
+}
+
+div#player {
+    color:pink
+}
+
+.left{
+    -webkit-animation:linear infinite alternate;
+    animation-name: run;
+    animation-duration: 24s;
+}     
+@keyframes run {
+    0% { left: -5%;}
+    50%{ left : 0%;}
+    100% { left: -5%;}
+}

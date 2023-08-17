@@ -1,0 +1,54 @@
+section.hero {
+    width: auto;
+    position: relative;
+    font-family: 'Varela Round', sans-serif;
+    img{
+        width: 100%;
+        height: auto;
+    }
+    .hero-text-area{
+        display: flex;
+        flex-direction: column;
+        gap: 50px;
+        position: absolute;
+        bottom: 60px;
+        left: 0;
+        right: 0;
+        z-index: 99;
+        font-family: 'Caveat', cursive;
+        
+        h2{        
+            color: #ffffff;                  
+            font-size: 3em;
+            text-shadow: 0px 4px #000;
+            background: #f0f8ff00;
+            font-family: 'Caveat', cursive;
+            padding: 10px;
+
+            @include for-wide-layout {
+                font-size: 6em;
+                padding: 0;
+            }
+        }
+        .buttons{
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+
+            .button{
+                background-color: $primary-color;
+                color: #ffffff;
+                padding: 10px;
+                font-size: 1.6em; 
+            }
+            .button.start-listening:hover ,.button.create-playlist:hover{
+                background-color: $primary-color-random-shade-c;
+
+            }
+        }
+    }
+}
+
+
+
+

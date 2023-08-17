@@ -1,0 +1,579 @@
+.mix-details {
+    width: 100%;
+    gap: 40px;
+    margin-top: 40px;
+    position: relative;
+
+    i.fas:hover,
+    i.far:hover,
+    i.fab:hover {
+        color: $primary-color;
+        cursor: pointer;
+    }
+
+}
+
+.hide {
+    display: none;
+}
+
+.show {
+    display: block;
+}
+
+.mix-full-info {
+    flex-direction: column;
+    color: #ffffff;
+    font-size: 1.125rem;
+    max-width: 1020px;
+    width: 100%;
+
+    @include for-wide-layout {
+        flex-direction: column;
+        padding-left: 40px;
+    }
+
+    .search-song-and-social {
+        display: flex;
+        justify-content: space-between;
+
+        .search-song {
+            align-self: flex-start;
+
+            input.el-input__inner {
+                width: 250px;
+                border: 1px solid #fff;
+                border-bottom: 1px solid black;
+                border-radius: 5px;
+            }
+        }
+    }
+
+    .header-mix-info {
+        width: 100%;
+        flex-direction: column;
+        margin-bottom: 40px;
+        text-align: left;
+        padding: 0 20px;
+
+        @include for-narrow-layout {
+            flex-direction: row;
+            padding: 0;
+        }
+
+        @include for-wide-layout {
+            flex-direction: row;
+            padding: 0;
+        }
+
+        .mix-img {
+            width: auto;
+
+            .mix-image {
+                min-width: 360px;
+                max-width: 360px;
+                min-height: 240px;
+                height: auto;
+                object-fit: cover;
+                margin-right: 20px;
+                object-fit: contain;
+            }
+
+            form {
+                min-height: 240px;
+
+                .loader {
+                    width: 10px;
+                    height: 10px;
+                }
+
+                .update-img-mix {
+                    position: relative;
+
+                    .imgUploader {
+                        color: #fff;
+                        position: relative;
+
+                        .image-edit-button {
+                            display: none;
+                            position: absolute;
+                            left: 20px;
+                            bottom: 20px;
+                            opacity: 0.7;
+                            font-size: 1.8rem;
+
+
+                        }
+                    }
+
+                }
+
+                .upload-container {
+                    width: 360px;
+                    height: 360px;
+                    border: 4px dashed #fff;
+                    position: relative;
+                    padding: 5px;
+                    margin: 0 15px 0 5px;
+                    .img-uploader {
+                        // position: absolute;
+                        margin: 0;
+                        padding: 0;
+                        width: 100%;
+                        height: 100%;
+                        outline: none;
+                        opacity: 0;
+                    }
+                    p{
+                        position: absolute;
+                        width: 100%;
+                        height: 100%;
+                        text-align: center;
+                        color: #ffffff;
+                        font-family: Arial;
+                        top: 50%;
+                        
+                    }
+                }
+
+            }
+
+            .update-img-mix:hover {
+                .imgUploader {
+                    .image-edit-button {
+                        display: block;
+                    }
+                }
+            }
+
+        }
+
+        .mix-info-main {
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+
+            .edit-txt {
+                i {
+                    font-size: 16px;
+                    display: none;
+                }
+            }
+
+            .mix-title {
+                font-family: netflixmd;
+            }
+
+            .mix-title:hover {
+                .edit-txt {
+                    i {
+                        display: inline-block;
+                    }
+                }
+            }
+        }
+
+        .mix-info {
+            text-align: left;
+            margin-bottom: 10px;
+
+            input.input-title {
+                border: none;
+                background-color: transparent;
+                color: white;
+                font-family: netflixmd;
+                font-size: 2.625rem;
+                font-weight: bold;
+                width: fit-content;
+            }
+
+            .description {
+                min-width: 140px;
+                display: flex;
+                flex-wrap: wrap;
+
+                span {
+                    i {
+                        display: none;
+                    }
+                }
+            }
+
+            .description:hover {
+                span {
+                    i {
+                        display: block;
+                    }
+                }
+            }
+
+            .textarea-container {
+                align-items: baseline;
+
+                textarea {
+                    font-size: 1.125rem;
+                    background-color: transparent;
+                    color: white;
+                    font-family: helveticaneue;
+                    border: none;
+                    resize: none;
+                }
+
+            }
+
+            .mix-genre {
+                display: flex;
+                flex-direction: row;
+                gap: 5px;
+                align-items: flex-start;
+                margin-top: 10px;
+                min-height: 40px;
+
+                .select-genre {
+                    display: none;
+                }
+            }
+
+            .mix-genre:hover {
+                align-items: flex-start;
+
+                .select-genre {
+                    display: block;
+                }
+            }
+
+            .stats {
+                display: flex;
+                flex-direction: column;
+
+                .mix-like {
+                    width: 100%;
+                    text-align: left;
+                    display: flex;
+                    justify-content: flex-start;
+                    margin: 5px 0;
+
+                    .like-song {
+                        width: 100%;
+                        text-align: left;
+
+                        .likes-count {
+                            margin-right: 8px;
+                        }
+
+                        i {
+                            font-size: 22px;
+                            color: #be1e2d;
+                        }
+                    }
+                }
+
+                .mix-views {
+                    width: 100%;
+                    text-align: left;
+                    display: flex;
+                    justify-content: flex-start;
+                    margin: 0px 0;
+
+                    h4 {
+                        margin-right: 8px;
+                    }
+
+                    i {
+                        font-size: 22px;
+                        color: $white-color;
+                        cursor: default;
+                    }
+                }
+            }
+
+            h2 {
+                font-size: 2.625rem;
+                font-family: 'Caveat', cursive;
+            }
+        }
+
+        .user-info {
+            display: flex;
+            flex-direction: column;
+
+            h5 {
+                display: flex;
+                flex-direction: row;
+                align-items: baseline;
+
+                img {
+                    width: 40px;
+                    height: auto;
+                    margin-top: 5px;
+                    border-radius: 50%;
+                    margin-right: 3px;
+                }
+            }
+
+            img {
+                width: 40px;
+                height: auto;
+            }
+        }
+    }
+
+    .mix-social {
+        margin-bottom: 40px;
+        align-items: baseline;
+
+        svg {
+            cursor: pointer;
+        }
+
+        .add-song {
+            i {
+                font-size: 22px;
+                color: #be1e2d;
+            }
+        }
+
+
+
+        .btn-actions {
+            width: auto;
+            display: flex;
+            flex-direction: row;
+            justify-content: flex-start;
+
+            .mix-like {
+                i {
+                    font-size: 42px;
+                    margin-right: 16px;
+                }
+
+                svg:hover {
+                    fill: red;
+                }
+
+            }
+
+            input {
+                min-width: 240px;
+            }
+        }
+    }
+}
+
+
+
+.songs-details-main {
+    gap: 10px;
+    justify-content: space-between;
+    align-items: center;
+    display: flex;
+    flex-direction: row;
+    margin-bottom: 12px;
+
+    .list-group-item {
+        list-style: none;
+        width: 100%;
+
+        .song-container {
+            display: flex;
+            width: 100%;
+            align-items: center;
+
+            .songs-details {
+                gap: 10px;
+                justify-content: space-between;
+                align-items: center;
+                display: flex;
+                flex-direction: row;
+                width: 100%;
+                transition: 0.3s all ease-in-out;
+
+
+                button {
+                    color: $primary-color;
+                    background: #fff0;
+                    outline: none;
+                    border: none;
+                    margin: 0 16px 0 0px;
+
+
+                }
+
+                i {
+                    font-size: 22px;
+                    color: $white-color;
+                }
+
+                i:hover {
+                    font-size: 22px;
+                    color: $primary-color;
+                }
+
+                i.far.fa-trash-alt {
+                    font-size: 22px;
+                    background-color: #fffadf29;
+                    align-self: flex-end;
+                }
+
+                .mix-image {
+                    width: 15px;
+                    height: auto;
+                    object-fit: cover;
+                    display: none;
+
+                    @include for-wide-layout {
+                        display: block;
+                    }
+
+                }
+
+                .play {
+                    cursor: pointer;
+                }
+
+                .up-down {
+                    width: 10px;
+                    height: auto;
+                    cursor: grab;
+                }
+
+                .trash {
+                    width: 15px;
+                    height: auto;
+                    fill: #fff;
+                    cursor: pointer;
+                }
+
+                .song-duration {
+                    display: none;
+
+                    @include for-wide-layout {
+                        display: block;
+                    }
+                }
+
+
+                &:hover {
+                    background-color: #fffadf0a;
+                    padding: 10px;
+                    border-radius: 3px;
+                    box-shadow: 0 0 8px #0000008c;
+                    transition: 0.3s all ease-in-out;
+                    cursor: grab;
+                }
+
+                &:active {
+                    cursor: grabbing;
+
+                }
+
+
+            }
+
+            .actions {
+                display: flex;
+                align-items: center;
+                gap: 10px;
+
+                .sort-songs-buttons {
+                    display: flex;
+                    flex-direction: column;
+                    margin-top: -8px;
+
+                    button {
+                        color: #fff;
+                        background: none;
+                        outline: none;
+                        border: 1px solid #18191a;
+                        height: 12px;
+
+                        i {
+                            font-size: 19px;
+                            color: #fff;
+                            height: 0;
+                        }
+
+                        i:hover {
+                            color: #be1e2d;
+                        }
+                    }
+                }
+            }
+
+        }
+    }
+}
+
+.songs-details:hover {
+    background-color: #fffadf29;
+}
+
+.share-container {
+    flex-direction: row;
+    align-items: baseline;
+    gap: 8px;
+
+    .invite {
+        flex-direction: row;
+        gap: 5px;
+    }
+
+    .mix-social-nav {
+        display: flex;
+        gap: 12px;
+
+        i {
+            font-size: 28px;
+        }
+    }
+}
+
+.chat-icon {
+    display: block;
+    position: fixed;
+    bottom: 80px;
+    right: 10px;
+    z-index: 113;
+    border-radius: 50%;
+    background-color: #18191a;
+    padding: 10px;
+    border-color: rgba(223, 225, 229, 0);
+    box-shadow: 0 1px 6px #9d9e9f78;
+
+    i {
+        font-size: 30px;
+        color: white;
+    }
+
+    @include for-normal-layout {
+        bottom: 80px;
+    }
+    
+    @include for-wide-layout {
+        display: none;
+    }
+}
+
+.display-chat {
+    // display: block ;
+    visibility: visible;
+}
+
+.hide-chat {
+    // display: none;  
+    visibility: hidden;
+}
+
+div.el-input {
+    width: 100% !important;
+    padding: 0 20px;
+}
+
+.currMixHide {
+    visibility: hidden !important;
+    height: 0 !important;
+    width: 0 !important;
+    position: fixed;
+    top: 0 !important;
+    left: 0 !important;
+}

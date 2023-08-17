@@ -1,0 +1,88 @@
+.login-user , .signup-user{
+    top:200px;
+    z-index: 100;
+
+
+    h2{
+        background: white;
+        color: #000;
+        // text-shadow: 1px 1px #fff;
+        border-radius: 5px 5px 0 0;
+    }
+
+    .submit-button{
+        background-color: #be1e2d;
+        color: #ffffff;
+        padding: 10px;
+        font-size: 1.6em;
+
+        &:hover{
+            background-color: #7d0000;
+        }
+    }
+
+    .header-login{
+        background: #fff;
+        padding: 5px 0 0 0;
+
+        .close{
+            font-size: 1.4em;
+            padding: 5px 10px;
+            border: none;
+            background: #454545;
+            outline: none;
+            position: absolute;
+            z-index: 11;
+            right: 0;
+
+            i{
+
+            }
+        }
+    }
+    .checkLogin{
+        background: white;
+        padding: 40px 0px 20px;
+        border-radius: 0 5px 5px 5px;
+
+        form{
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            gap: 10px;
+
+            div.el-input{
+                width: 30%;
+            }
+            .el-button--success{
+                width: 80%;
+
+            }
+        }
+    }
+
+    .rub{
+        display: flex;
+        padding: 5px 60px;
+        .req{
+            font-size: 1.2em;
+        
+        }
+        .el-input{
+            padding: 0;
+        }
+    }
+}
+
+
+
+.screen{
+    
+    position: absolute;
+    left: 0;
+    width: 100vw;
+    height: 100vw;
+    background: #0000009c;
+    z-index: 98;
+}

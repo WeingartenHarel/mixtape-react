@@ -1,0 +1,36 @@
+
+//BASIC SETUP{
+@import 'basics/base.scss';
+@import 'basics/helpers';
+
+//SETUP
+@import 'setup/typography';
+@import 'setup/variables';
+@import 'setup/mixins';
+@import 'setup/functions';
+
+//COMPONENTS
+@import 'views/mix-app.scss';
+@import 'views/app-footer.scss';
+@import 'components/app-header.scss';
+@import 'components/playlists.scss';
+
+@import 'views/mix-details.scss';
+@import 'components/mix-genre';
+
+@import 'views/mix-home.scss';
+@import './components/mix-hero';
+@import 'components/mix-carousel.scss';
+@import 'components/mix-list.scss';
+@import 'components/mix-song-list.scss';
+@import 'components/mix-list-home.scss';
+@import 'components/mix-preview.scss';
+@import 'components/mix-api-search.scss';
+@import 'components/mix-chat.scss';
+@import 'components/mix-global-player.scss';
+@import 'components/slick-slide.scss';
+@import 'components/mix-login-signup.scss';
+
+// @import 'views/mix-login.scss';
+@import 'components/mix-list.scss';
+@import 'components/mix-preview.scss';
