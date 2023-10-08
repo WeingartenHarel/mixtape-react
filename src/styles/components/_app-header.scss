@@ -1,6 +1,7 @@
 
 .app-header{
-    position: relative;
+    position: fixed;
+    top: 0px;
     padding: 1rem;
     display: flex;
     align-items: center;
@@ -9,14 +10,20 @@
     z-index: 101;
     width: 100%;
     background: #000000c9;
+    height:85px;
+
+    @include for-normal-layout {
+        position: relative;
+    }
 
     @include for-wide-layout {
         gap: 20px;
+        height:115px;
     }
   
     .imgroot{
         width: 60px;
-        height: 60px;
+        height: 40px;
         position: relative;
         top: 6px;
         right: 6px;
@@ -159,8 +166,8 @@
             font-size: 4em;
             margin-left: 20px;
             margin-top: -10px;
-
             display: none;
+            
             @include for-wide-layout {
                 padding: 0;
                 display: block;
@@ -168,21 +175,24 @@
     
         }
         img{
-            width: 140px;
+            width: 80px;
             height: auto;
 
+            @include for-wide-layout {
+                width:120px;
+            }
         }
     }
  
     .logo:hover{
-            font-family: "Caveat", cursive;
+            // font-family: "Caveat", cursive;
         img{
-            width:120px;
+            width: 80px;
             height: auto;
             content:url(https://res.cloudinary.com/hw-projects/image/upload/v1607170035/appmixes/logo_r_animated_v3_first_Frame_160x105.jpg);
 
             @include for-wide-layout {
-                width:160px;
+                width:120px;
             }
         }
     }
@@ -194,7 +204,7 @@
             content:url(https://res.cloudinary.com/hw-projects/image/upload/v1607170425/appmixes/logo_r_animated_v3_160x105.gif);
             
             @include for-wide-layout {
-                width:160px;
+                width:120px;
             }
         }
     }
@@ -206,7 +216,7 @@
             content:url(https://res.cloudinary.com/hw-projects/image/upload/v1607170035/appmixes/logo_r_animated_v3_first_Frame_160x105.jpg );
        
             @include for-wide-layout {
-                width:160px;
+                width:120px;
             }
         }
     }

@@ -15,6 +15,8 @@ import { useSelector, useDispatch } from 'react-redux';
 import MixSongs from '../MixSongs/MixSongs';
 import MixChat from '../MixChat/MixChat';
 import { setCurrentMixById, setCurrentMix, getMix, saveMix, updateMix, setMixNew, saveUpdateMix } from '../../store/slices/mixSlice'
+import { setCurrentSong } from '../../store/slices/mixSlice'
+
 import { uploadImg } from "../../services/imgUploadService.js";
 
 // import { io } from "socket.io-client";
@@ -51,6 +53,7 @@ const MixDetails = () => {
   const [imgUrls, setImgUrls] = useState([]);
   const [fooEvents, setFooEvents] = useState([]);
   const { loggedInUser } = useSelector((state) => state.user); // Replace 'state.loggedInUser' with your actual state slice containing the logged-in user
+  const { currSong } = useSelector(state => state.mixs);
 
   useEffect(() => {
     const mixId = queryParams.get('mixId');
@@ -71,6 +74,8 @@ const MixDetails = () => {
     const mixCopy = { ...currentMix }
     setCurrentMixCopy(mixCopy)
   }, [currentMix]);
+
+
 
   const handleChange = (e) => {
     const name = e.target.name
@@ -180,7 +185,7 @@ const MixDetails = () => {
 
   return (
     <>
-      {currentMix && <section className="mix-details flex">
+      {currentMix && <section className="mix-details flex" >
         <div className="mix-full-info flex">
           <section className="header-mix-info flex">
             <section className="mix-img flex start">
@@ -279,6 +284,9 @@ const MixDetails = () => {
           <div className="songs">
             <MixSongs currentMix={currentMix} />
           </div>
+
+
+
         </div>
 
         <div className="chat-icon" onClick={toggleShow}>

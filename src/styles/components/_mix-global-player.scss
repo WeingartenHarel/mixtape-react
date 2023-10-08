@@ -1,3 +1,14 @@
+.globalPlayer {
+    position: relative;
+
+    .modal {
+        display: flex;
+        position: absolute;
+        top: -100px;
+        left: 0;
+    }
+}
+
 .global-player {
     background-color: #b2c5c3;
     color: #ffffff;
@@ -16,30 +27,42 @@
     // background-position-y: -00px;
     box-shadow: 1px 1px 3px rgb(141, 141, 141);
     padding: 0 10px;
-    flex-direction: column;
+    flex-direction: row;
     z-index: 1000;
 
     @include for-normal-layout {
         flex-direction: row;
     }
 
+
+
     .title-width {
         width: 100%;
-
+        display: flex;
         @include for-normal-layout {
             width: 80%;
         }
     }
 
-    .section-up{
+    .sections-container {
         display: flex;
-        align-items: center;
-        gap: 20px;
-    }
+        flex-direction: column;
+        
+        @include for-normal-layout {
+            flex-direction: row;
+        }
 
-    .section-down {
-        display: flex;
-        align-items: center;
+        .section-up {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .section-down {
+            height: 23x;
+            display: flex;
+            align-items: center;
+        }
     }
 
     p {
@@ -78,10 +101,9 @@
         font-family: "Caveat", cursive;
 
         img {
-            width: 20px;
+            width: 80px;
             height: auto;
             content: url(https://res.cloudinary.com/hw-projects/image/upload/v1606477296/appmixes/logo_r_animated_v3.gif);
-
 
             @include for-normal-layout {
                 width: 80px;
@@ -94,12 +116,10 @@
 
     .logo-playing {
         img {
-
-
-            width: 20px;
+            width: 80px;
             height: auto;
             content: url(https://res.cloudinary.com/hw-projects/image/upload/v1606477296/appmixes/logo_r_animated_v3.gif);
-           
+
             @include for-normal-layout {
                 width: 80px;
             }
@@ -108,14 +128,17 @@
 
     .logo-stop {
         img {
-            width: 20px;
+            width: 80px;
             height: auto;
-            content: url(https://res.cloudinary.com/hw-projects/image/upload/v1606479695/appmixes/logo_r_animated_v3_first_Frame.jpg);
+            // content: url(https://res.cloudinary.com/hw-projects/image/upload/v1606479695/appmixes/logo_r_animated_v3_first_Frame.jpg);
+            content: url(https://res.cloudinary.com/hw-projects/image/upload/v1606477296/appmixes/logo_r_animated_v3.gif);
+
+            @include for-normal-layout {
+                width: 80px;
+            }
         }
 
-        @include for-normal-layout {
-            width: 80px;
-        }
+
     }
 
     .mute {
@@ -181,9 +204,10 @@
 .progress-bar {
     display: flex;
     align-items: center;
-
+    gap:5px;
+    
     p {
-        padding: 0 15px;
+        padding: initial;
     }
 
     input[type="range"] {
@@ -307,7 +331,7 @@
 
         p {
             font-size: 10px;
-            padding: 0 15px;
+            // padding: 0 15px;
         }
 
         input[type="range"] {
@@ -400,7 +424,7 @@
 @media(max-width:1060px) {
     .global-player {
         height: 50px;
-        gap: 0;
+        gap: 10px;
 
         h2 {
             font-size: 10px;
@@ -453,15 +477,16 @@
     .progress-bar {
         display: flex;
         align-items: center;
+        gap:5px;
 
         p {
             font-size: 10px;
-            padding: 0 15px;
+            // padding: 0 15px;
         }
 
         input[type="range"] {
             background-position-y: -100px;
-            width: 250px;
+            width: 150px;
             height: 8px;
         }
 
@@ -507,7 +532,7 @@
 @media(max-width:765px) {
     .global-player {
         height: 60px;
-        gap: 0;
+        gap: 10px;
 
         h2 {
             font-size: 10px;
@@ -523,7 +548,7 @@
 @media(max-width:750px) {
     .global-player {
         height: 60px;
-        gap: 0;
+        gap: 10px;
 
         h2 {
             font-size: 10px;
@@ -534,10 +559,10 @@
     .progress-bar {
         display: flex;
         align-items: center;
-
+        gap:5px;
         p {
             font-size: 10px;
-            padding: 0 15px;
+            // padding: 0 15px;
         }
 
         input[type="range"] {
@@ -588,7 +613,7 @@
 @media(max-width:611px) {
     .global-player {
 
-        gap: 0;
+        gap: 10px;
 
         h2 {
             font-size: 10px;
@@ -599,10 +624,10 @@
     .progress-bar {
         display: flex;
         align-items: center;
-
+        gap:5px;
         p {
             font-size: 10px;
-            padding: 0 15px;
+            // padding: 0 15px;
         }
 
         input[type="range"] {
@@ -653,7 +678,7 @@
 @media(max-width:415px) {
     .global-player {
 
-        gap: 0;
+        gap: 10px;
 
         h2 {
             font-size: 10px;
@@ -664,6 +689,7 @@
     .progress-bar {
         display: flex;
         align-items: center;
+        gap:5px;
 
         p {
             font-size: 10px;

@@ -5,6 +5,7 @@ import { SocketContext } from '../../context/socket';
 import { Link } from 'react-router-dom';
 import YouTube, { YouTubeProps } from 'react-youtube';
 import { utilService } from "../../services/utilService.js";
+import ReactPlayer from 'react-player/youtube'
 
 import Prev from '../../Assets/prev.svg'
 import Next from '../../Assets/next.svg'
@@ -13,7 +14,11 @@ import Pause from '../../Assets/pause.svg'
 import Mute from '../../Assets/mute.svg'
 import Unmute from '../../Assets/unmute.svg'
 
-import { setCurrentMixById, setCurrentMix, getMix, saveMix, updateMix, setMixNew, setCurrentSong, setPrevSongNotPlaying, saveUpdateMix } from '../../store/slices/mixSlice'
+import {
+  setCurrentMixById, setCurrentMix, getMix, saveMix, updateMix, setMixNew,
+  setCurrentSong, setPrevSongNotPlaying, saveUpdateMix, setCurrentSongPause,
+  setCurrentSongPlay
+} from '../../store/slices/mixSlice'
 
 const Player = () => {
   const youtubeRef = useRef(null);
@@ -30,36 +35,109 @@ const Player = () => {
   const [totalTime, setTotalTime] = useState(0);
   const [totalTimeToDisplay, setTotalTimeToDisplay] = useState(0);
 
-  const [isMuted, setIsMuted] = useState(false);
-  const [volume, setVolume] = useState(50);
+  const [volume, setVolume] = useState(0.5);
+  const [volumeDisplay, setVolumeDisplay] = useState(50);
+  const [isPlaying, setIsPlaying] = useState(true);
+  const [isMuted, setIsMuted] = useState(true);
+  const [isSeeking, setSeeking] = useState(false);
+  const [isEmitSongTIme, setIsEmitSongTIme] = useState(false);
 
+  useEffect(() => {
+    if (!socket.current) return
+    socket.current.on('song-time', event => {
+      console.log('event', event)
+      // if (!isEmitSongTIme || !isSeeking)  
+      // isEmitSongTIme ,isSeeking
+      // setCurrTime(event.played)
+      youtubeRef.current.seekTo(event)
+      // setCurrTimeToDisplay(utilService.convertSecondsToTime(Math.floor(event.playedSeconds)));
+      // setIsEmitSongTIme(false)
+    })
 
-  const playerStateChange = (e) => {
-  }
+    socket.current.on("play-song", (song) => {
+      dispatch(setCurrentSong(song))
+      setIsPlaying(true)
+      setIsMuted(false)
+    });
+
+    socket.current.on("pause-song", (song) => {
+      setIsPlaying(false)
+      setIsMuted(true)
+    });
+  }, [socket.current]);
+
 
   useEffect(() => {
     if (!currSong) return
     setSontUrl(currSong.songUrlId);
+    setTotalTime(currSong.duration)
     setTotalTimeToDisplay(currSong.duration)
+
+    if (currSong.isPlaying) {
+      setIsPlaying(true)
+      setIsMuted(false)
+    } else {
+      setIsPlaying(false)
+      setIsMuted(true)
+    }
   }, [currSong]);
 
   useEffect(() => {
-    if (!currSong || !playerEvent) return
+    if (!currentMix) return
+    const song = currentMix.songs.filter(item => item.isPlaying)[0]
+    if (!song) return
+    dispatch(setCurrentSong(song))
 
-    const intervalId = setInterval(() => {
-      let currentTimeResult = Math.floor(playerEvent.target.getCurrentTime());
-      setCurrTime(currentTimeResult)
+  }, [currentMix]);
 
-      let currentTimeToSecResult = utilService.convertSecondsToTime(
-        Math.floor(playerEvent.target.getCurrentTime())
-      );
-      setCurrTimeToDisplay(currentTimeToSecResult);
-    }, 1000);
+  const handleProgress = (event) => {
+    // console.log('handleProgress' , event)
+    // if (!isSeeking)
+    setCurrTime(event.played)
+    setCurrTimeToDisplay(utilService.convertSecondsToTime(Math.floor(event.playedSeconds)));
+    // socket.current.emit('move-to', event);
+  }
 
-    return () => clearInterval(intervalId);
-  }, [currSong, playerEvent]);
+  // const handleSeekChange = (event) => {
+  //   const time = event.target.value
+  //   console.log('time',time)
+  //   // console.log('event',event)
+  //   setCurrTime(time)
+  //   youtubeRef.current.seekTo(parseFloat(time))
+  //   // setCurrTimeToDisplay(utilService.convertSecondsToTime(Math.floor(event.playedSeconds)));
+  //   socket.current.emit('move-to', event);
+  //   // setIsEmitSongTIme(true)
+  // }
 
-  const play = () => {
+  const onSeek = (e) => {
+    console.log('onseek e', e)
+  }
+
+  const handleSeekMouseDown = e => {
+    setSeeking(true)
+  }
+
+  const handleSeekMouseUp = e => {
+    setSeeking(false)
+  }
+
+  const handleSeekChange = (event) => {
+    const time = event.target.value
+    youtubeRef.current.seekTo(parseFloat(time))
+    console.log('handleSeekChange', time)
+    socket.current.emit('move-to', time);
+
+  }
+
+  const ended = (event) => {
+    autoPlayNextSong()
+  }
+
+
+  const handlePlaySong = async () => {
+    setIsPlaying(true)
+    setIsMuted(false)
+
     const index = currentMix.songs.findIndex((item) => item.id === currSong.id);
     let currentMixCopy = JSON.parse(JSON.stringify(currentMix));
     let currentSongsCopy = JSON.parse(JSON.stringify(currentMix.songs));
@@ -77,12 +155,15 @@ const Player = () => {
     let songCopy = { ...currSong }
     songCopy.isPlaying = true
 
+    await dispatch(setCurrentSongPlay())
     socket.current.emit('set-song-playing', songCopy);
-    dispatch(setCurrentSong(songCopy))
 
   };
 
-  const handlePauseSong = () => {
+  const handlePauseSong = async () => {
+    setIsPlaying(false)
+    setIsMuted(true)
+
     const index = currentMix.songs.findIndex((item) => item.id === currSong.id);
     let currentMixCopy = JSON.parse(JSON.stringify(currentMix));
     let currentSongsCopy = JSON.parse(JSON.stringify(currentMix.songs));
@@ -96,12 +177,13 @@ const Player = () => {
     currentMixCopy.songs = currentSongsCopyReset
     currentMixCopy.songs[index].isPlaying = false;
     saveUpdateMixAndEmit(currentMixCopy)
-    // dispatch(updateMix(currentMixCopy))
 
     let songCopy = { ...currSong }
     songCopy.isPlaying = false
+
+    // await dispatch(setCurrentSong(songCopy))
+    await dispatch(setCurrentSongPause())
     socket.current.emit('pause-song-playing', songCopy);
-    dispatch(setCurrentSong(songCopy))
   }
 
   const onPrevSong = () => {
@@ -168,123 +250,128 @@ const Player = () => {
     socket.current.emit('mix-updated', mix);
   }
 
-  const _onReady = (eventPlayer) => {
-    if (!currSong) return
-    setPlayerEvent(eventPlayer)
-    setTotalTime(eventPlayer.target.getDuration());
-
-    if (currSong.isPlaying) eventPlayer.target.playVideo();
-    if (currSong.isPlaying === false) eventPlayer.target.pauseVideo();
-
-    socket.current.on('song-time', currTimePlaying => {
-      eventPlayer.target.seekTo(currTimePlaying, true);
-    })
-
-    socket.current.on("pause-song", () => {
-      eventPlayer.target.pauseVideo();
-    });
-    socket.current.on("play-song", () => {
-      eventPlayer.target.playVideo();
-    });
-
-  }
-
-  const onInputChange = async (event) => {
-    const time = event.target.value
-    await playerEvent.target.seekTo(event.target.value, true);
-    socket.current.emit('move-to', time);
-  }
-
-  const opts = {
-    height: '390',
-    width: '640',
-    playerVars: {
-      autoplay: 1,
-      origin: window.location.origin,
-      controls: 0,
-      modestbranding: 1,
-      rel: 0,
-      allowfullscreen: 1,
-      frameBorder: 0,
-      autohide: 1,
-      // origin: 'http://localhost:3000',
-      // origin: 'https://www.youtube.com'
-    }
-  };
-
   const changeVolume = (e) => {
-    if (!playerEvent) return
-    let volumeValue = e.target.value
-    playerEvent.target.setVolume(volumeValue)
+    let num = Number(e.target.value);
+    let volumeValue = num / 100
+    setVolumeDisplay(num)
     setVolume(volumeValue)
   }
 
   const mute = () => {
-    // this.isMuted = true;
-    playerEvent.target.mute();
+    setIsMuted(true)
   }
 
   const unmute = () => {
-    playerEvent.target.unMute();
+    setIsMuted(false)
+    setIsPlaying(true)
+  }
+
+  const play = () => {
+    setIsPlaying(true)
   }
 
   return (
     <section className="globalPlayer">
+      {/* Join party mode */}
+      {isPlaying && <div className='modal' onClick={play}> </div>}
       <div className="global-player">
-
-        <div className='section-up'>
-          <div className={currSong && currSong.isPlaying ? 'logo-playing' : 'logo-stop'}>
-            <Link to="/">
-              <img
-                className="reflect"
-                src="https://res.cloudinary.com/hw-projects/image/upload/v1606479695/appmixes/logo_r_animated_v3_first_Frame"
-              />
-            </Link>
-          </div>
-          <div className="title-width">
-            <h2>{currSong ? currSong.title : 'Unknown Song'}</h2>
-          </div>
+        <div className={currSong && currSong.isPlaying ? 'logo-playing' : 'logo-stop'}>
+          <Link to="/">
+            <img
+              className="reflect"
+              src="https://res.cloudinary.com/hw-projects/image/upload/v1606479695/appmixes/logo_r_animated_v3_first_Frame"
+            />
+          </Link>
         </div>
-
-        <div className='section-down'>
-          <div className="progress-bar">
-            {currTimeToDisplay ? <p>{currTimeToDisplay}</p> : <p>00:00</p>}
-            <input onChange={onInputChange} type="range" min={'0'} max={totalTime} value={currTime} />
-            {totalTimeToDisplay ? <p>{totalTimeToDisplay}</p> : <p>00:00</p>}
-          </div>
-          <div className="step-btn">
-            <button onClick={onPrevSong}>
-              <img src={Prev} />
-            </button>
-
-            {currSong?.isPlaying ? <button onClick={handlePauseSong}>
-              <img src={Pause} />
-            </button>:
-            <button onClick={play}>
-              <img src={Play} />
-            </button> }
-            <button onClick={onNextSong}>
-              <img src={Next} />
-            </button>
-          </div>
-          <div className="mute">
-            <button onClick={mute}>
-              <img src={Mute} />
-            </button>
-            <div className="player-volume">
-              <input type="range" min="0" max="100" value={volume} onChange={changeVolume} />
-              {volume ? <p>{volume}</p> :
-                <p>50</p>}
+        <div className='sections-container'>
+          <div className='section-up'>
+            <div className="title-width">
+              <h2>{currSong ? currSong.title : 'Unknown Song'}</h2>
             </div>
-            <button onClick={unmute}>
-              <img src={Unmute} />
-            </button>
           </div>
-          {/* picture-in-picture */}
-          {
-            songUrl && <YouTube ref={youtubeRef} videoId={songUrl} onStateChange={playerStateChange}
-              opts={opts} onReady={_onReady} onEnd={autoPlayNextSong} />
-          }
+
+          <div className='section-down'>
+            <div className="progress-bar">
+              {currTimeToDisplay ? <p>{currTimeToDisplay}</p> : <p>00:00</p>}
+              <input
+                type='range' min={0} max={0.999999} step='any'
+                value={currTime}
+                onMouseDown={handleSeekMouseDown}
+                onChange={handleSeekChange}
+                onMouseUp={handleSeekMouseUp}
+              />
+              {totalTimeToDisplay ? <p>{totalTimeToDisplay}</p> : <p>00:00</p>}
+            </div>
+
+
+            <div className="step-btn">
+              <button onClick={onPrevSong}>
+                <img src={Prev} />
+              </button>
+
+              {isPlaying ? <button onClick={handlePauseSong}>
+                <img src={Pause} />
+              </button> :
+                <button onClick={handlePlaySong}>
+                  <img src={Play} />
+                </button>}
+              <button onClick={onNextSong}>
+                <img src={Next} />
+              </button>
+            </div>
+            <div className="mute">
+              <button onClick={mute}>
+                <img src={Mute} />
+              </button>
+              <div className="player-volume">
+                <input type="range" min={0} max={100} value={volumeDisplay} onChange={changeVolume} />
+                <p>{volumeDisplay}</p>
+              </div>
+              <button onClick={unmute}>
+                <img src={Unmute} />
+              </button>
+            </div>
+
+          </div>
+          {songUrl && isPlaying && <>
+            <ReactPlayer
+              ref={youtubeRef}
+              url={`https://www.youtube.com/watch?v=${songUrl}`}
+              config={{
+                youtube: {
+                  playerVars: {
+                    showinfo: 1, autoplay: 1,
+                    mute: 0,
+                    origin: window.location.origin
+                  }
+                },
+              }}
+              playing={isPlaying}
+              muted={isMuted}
+              className='react-player'
+              width='0px'
+              height='0px'
+              volume={volume}
+              onSeek={e => onSeek(e)}
+              onProgress={handleProgress}
+              onEnded={ended}
+              onError={e => console.log('onError', e)}
+            // onDuration={handleSeekChange}
+            // pip={pip}
+            // controls={controls}
+            // light={light}
+            // loop={loop}
+            // playbackRate={playbackRate}
+            // onReady={() => console.log('onReady')}
+            // onStart={() => console.log('onStart')}
+            // onPlay={this.handlePlay}
+            // onEnablePIP={this.handleEnablePIP}
+            // onDisablePIP={this.handleDisablePIP}
+            // onPause={this.handlePause}
+            // onBuffer={() => console.log('onBuffer')}
+            // onPlaybackRateChange={this.handleOnPlaybackRateChange}
+            // onPlaybackQualityChange={e => console.log('onPlaybackQualityChange', e)}
+            /></>}
         </div>
       </div >
 

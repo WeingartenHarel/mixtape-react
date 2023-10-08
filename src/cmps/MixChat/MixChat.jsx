@@ -125,6 +125,7 @@ function MixChat({ }) {
     };
 
     const isTypingNow = () => {
+        console.log('is typing')
         socket.current.emit('is typing', isTyping);
         setIsTyping(true);
     };

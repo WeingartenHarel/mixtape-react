@@ -18,12 +18,12 @@ const MixSongs = ({ currentMix }) => {
 
   useEffect(() => {
     socket.current.on('play-song', song => {
-      dispatch(setCurrentSong(song))
+      // dispatch(setCurrentSong(song))
     })
 
     socket.current.on('pause-song', currSong => {
       currSong.isPlaying = false
-      dispatch(setCurrentSong(currSong))
+      //  dispatch(setCurrentSong(currSong))
     })
 
     socket.current.on('mix-is-updated', mix => {
@@ -50,7 +50,7 @@ const MixSongs = ({ currentMix }) => {
     currentMixCopy.songs.forEach(song => song.isPlaying = false);
     currentMixCopy.songs[index].isPlaying = true;
     saveUpdateMixAndEmit(currentMixCopy)
-    // dispatch(updateMix(currentMixCopy))
+    dispatch(updateMix(currentMixCopy))
 
     let songCopy = { ...song }
     songCopy.isPlaying = true

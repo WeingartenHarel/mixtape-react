@@ -50,18 +50,18 @@ export const updateMix = (mix) => async (dispatch) => {
 
 export const saveUpdateMix = (mix) => async (dispatch) => {
     try {
-        if(!mix._id){
+        if (!mix._id) {
             const newMix = await mixService.save(mix);
-            console.log('saveUpdateMix newMix',newMix._id)
+            console.log('saveUpdateMix newMix', newMix._id)
             dispatch(setCurrentMix(newMix));
-            
+
             // router.push(`/`)
             // router.push(`/mix/details/${newMix._id}`)
-        }else{
+        } else {
             const mixUpdated = await mixService.update(mix);
             dispatch(setCurrentMix(mixUpdated));
             return mix
-        }   
+        }
     } catch (error) {
         console.error('Error fetching mix:', error);
     }
@@ -118,11 +118,11 @@ const mixSlice = createSlice({
         },
         setMixUser: (state, action) => {
             // let mixsCopy = [...state.mixs]
-            
-            let mixsCopy =JSON.parse(JSON.stringify(state.mixs))
+
+            let mixsCopy = JSON.parse(JSON.stringify(state.mixs))
             const user = action.payload
-            const mixsUser = mixsCopy.filter(mix =>mix.createdBy._id === user._id )
-            console.log('mixsUser',mixsUser)
+            const mixsUser = mixsCopy.filter(mix => mix.createdBy._id === user._id)
+            console.log('mixsUser', mixsUser)
             state.mixsUser = mixsUser
         },
         setGenreToDisplay: (state, action) => {
@@ -167,10 +167,19 @@ const mixSlice = createSlice({
         setPrevSongNotPlaying(state, payload) {
             state.mixs.songs[payload.songIdx].isPlaying = false;
         },
+        setCurrentSongPause(state, payload) {
+            state.currSong.isPlaying = false;
+        },
+        setCurrentSongPlay(state, payload) {
+            state.currSong.isPlaying = true;
+        },
     }
 
 })
 
 
-export const { setMix, setMixUser,setGenreToDisplay, setCurrentMix, setCurrentSong, setSortedMixes, setCurrentMixById, setMixNew, setPrevSongNotPlaying ,updateCurrentMix} = mixSlice.actions
+export const { setMix, setMixUser, setGenreToDisplay, setCurrentMix, setCurrentSong,
+    setSortedMixes, setCurrentMixById, setMixNew, setPrevSongNotPlaying, updateCurrentMix ,
+    setCurrentSongPause ,setCurrentSongPlay
+} = mixSlice.actions
 export default mixSlice.reducer

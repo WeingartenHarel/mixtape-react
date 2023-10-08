@@ -24,7 +24,7 @@
     "react-slick": "^0.29.0",
     "react-youtube": "^10.1.0",
     "redux": "^4.2.1",
-    "sass": "^1.64.2",
+    "sass": "^1.64.2", 
     "slick-carousel": "^1.8.1",
     "socket.io-client": "^4.4.0",
     "use-socket-io-react": "^0.2.1",
