@@ -46,8 +46,6 @@ function ListDrag({ mixSongsDataFiltered, handlePlaySong, handlePauseSong, curre
         dispatch(saveUpdateMix(mix));
         socket.current.emit('mix-updated', mix);
       }
-    
-    {/* && !currSong?.isPlaying && currSong?.id === item.id */ }
 
     return (
         <div className="songs">

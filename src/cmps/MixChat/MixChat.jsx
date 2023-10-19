@@ -10,7 +10,7 @@ import {
     useNavigate,
     useSearchParams
 } from "react-router-dom";
-
+ 
 import Send from '../../Assets/send.svg'
 import Trash from '../../Assets/trash.svg'
 

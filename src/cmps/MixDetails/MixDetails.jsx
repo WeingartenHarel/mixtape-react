@@ -173,12 +173,6 @@ const MixDetails = () => {
     // You can dispatch an action using Redux if needed
   };
 
-  const playSongOnStart = () => {
-    // Implement the logic to play the first song on start
-    // You can use the useEffect hook to handle side effects
-    // For example, use a WebSocket to synchronize song playing across clients
-  };
-
   const toggleShow = () => {
     setChatIsShow((prevChatIsShow) => !prevChatIsShow);
   };
@@ -284,9 +278,6 @@ const MixDetails = () => {
           <div className="songs">
             <MixSongs currentMix={currentMix} />
           </div>
-
-
-
         </div>
 
         <div className="chat-icon" onClick={toggleShow}>
@@ -296,7 +287,6 @@ const MixDetails = () => {
         <div className={`mix-chat ${chatIsShow ? 'display-chat' : 'hide-chat'}   `} >
           <MixChat mixId={mixId} />
         </div>
-
       </section>}
     </>
 

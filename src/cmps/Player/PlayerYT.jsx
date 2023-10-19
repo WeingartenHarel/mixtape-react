@@ -176,17 +176,16 @@ const Player = () => {
     if (currSong.isPlaying) eventPlayer.target.playVideo();
     if (currSong.isPlaying === false) eventPlayer.target.pauseVideo();
 
-    socket.current.on('song-time', currTimePlaying => {
-      eventPlayer.target.seekTo(currTimePlaying, true);
-    })
+    // socket.current.on('song-time', currTimePlaying => {
+    //   eventPlayer.target.seekTo(currTimePlaying, true);
+    // })
 
-    socket.current.on("pause-song", () => {
-      eventPlayer.target.pauseVideo();
-    });
-    socket.current.on("play-song", () => {
-      eventPlayer.target.playVideo();
-    });
-
+    // socket.current.on("pause-song", () => {
+    //   eventPlayer.target.pauseVideo();
+    // });
+    // socket.current.on("play-song", () => {
+    //   eventPlayer.target.playVideo();
+    // });
   }
 
   const onInputChange = async (event) => {

@@ -34,11 +34,18 @@
         flex-direction: row;
     }
 
-
+    .button {
+        background-color: #be1e2d;
+        color: #ffffff;
+        padding: 5px;
+        font-size: 1.1em;
+        cursor: pointer;
+    }
 
     .title-width {
         width: 100%;
         display: flex;
+
         @include for-normal-layout {
             width: 80%;
         }
@@ -47,7 +54,7 @@
     .sections-container {
         display: flex;
         flex-direction: column;
-        
+
         @include for-normal-layout {
             flex-direction: row;
         }
@@ -204,8 +211,8 @@
 .progress-bar {
     display: flex;
     align-items: center;
-    gap:5px;
-    
+    gap: 5px;
+
     p {
         padding: initial;
     }
@@ -477,7 +484,7 @@
     .progress-bar {
         display: flex;
         align-items: center;
-        gap:5px;
+        gap: 5px;
 
         p {
             font-size: 10px;
@@ -559,7 +566,8 @@
     .progress-bar {
         display: flex;
         align-items: center;
-        gap:5px;
+        gap: 5px;
+
         p {
             font-size: 10px;
             // padding: 0 15px;
@@ -624,7 +632,8 @@
     .progress-bar {
         display: flex;
         align-items: center;
-        gap:5px;
+        gap: 5px;
+
         p {
             font-size: 10px;
             // padding: 0 15px;
@@ -689,7 +698,7 @@
     .progress-bar {
         display: flex;
         align-items: center;
-        gap:5px;
+        gap: 5px;
 
         p {
             font-size: 10px;

@@ -17,60 +17,71 @@ import Unmute from '../../Assets/unmute.svg'
 import {
   setCurrentMixById, setCurrentMix, getMix, saveMix, updateMix, setMixNew,
   setCurrentSong, setPrevSongNotPlaying, saveUpdateMix, setCurrentSongPause,
-  setCurrentSongPlay
+  setCurrentSongPlay,updateCurrentMix
 } from '../../store/slices/mixSlice'
+import { setIsPlaying, setIsMuted, setIsPartyMode } from '../../store/slices/playerSlice'
 
 const Player = () => {
-  const youtubeRef = useRef(null);
+  // const youtubeRef = useRef(null);
   const dispatch = useDispatch()
   const socket = useContext(SocketContext);
 
   const { currentMix } = useSelector((state) => state.mixs);
   const { currSong } = useSelector(state => state.mixs);
+  const { isPlaying } = useSelector(state => state.player);
+  const { isMuted } = useSelector(state => state.player);
+  const { isPartyMode } = useSelector(state => state.player);
+
   const [playerEvent, setPlayerEvent] = useState(null);
   const [songUrl, setSontUrl] = useState(null);
+  const [youtubeRef, setYoutubeRef] = useState(null);
 
   const [currTime, setCurrTime] = useState(0);
   const [currTimeToDisplay, setCurrTimeToDisplay] = useState(0);
-  const [totalTime, setTotalTime] = useState(0);
   const [totalTimeToDisplay, setTotalTimeToDisplay] = useState(0);
 
   const [volume, setVolume] = useState(0.5);
   const [volumeDisplay, setVolumeDisplay] = useState(50);
-  const [isPlaying, setIsPlaying] = useState(true);
-  const [isMuted, setIsMuted] = useState(true);
+  // const [isPartyMode, setIsPartryMode] = useState(false);
   const [isSeeking, setSeeking] = useState(false);
-  const [isEmitSongTIme, setIsEmitSongTIme] = useState(false);
+  const [checkIsPartyMode, setCheckIsPartyMode] = useState(false);
 
   useEffect(() => {
     if (!socket.current) return
-    socket.current.on('song-time', event => {
-      console.log('event', event)
-      // if (!isEmitSongTIme || !isSeeking)  
-      // isEmitSongTIme ,isSeeking
-      // setCurrTime(event.played)
-      youtubeRef.current.seekTo(event)
-      // setCurrTimeToDisplay(utilService.convertSecondsToTime(Math.floor(event.playedSeconds)));
-      // setIsEmitSongTIme(false)
+    socket.current.on('song-time', (payload) => {
+      setCheckIsPartyMode({ on: 'song-time', payload })
     })
+    socket.current.on("play-song", (payload) => {
+      setCheckIsPartyMode({ on: 'play-song', payload })
 
-    socket.current.on("play-song", (song) => {
-      dispatch(setCurrentSong(song))
-      setIsPlaying(true)
-      setIsMuted(false)
     });
-
-    socket.current.on("pause-song", (song) => {
-      setIsPlaying(false)
-      setIsMuted(true)
+    socket.current.on("pause-song", (payload) => {
+      setCheckIsPartyMode({ on: 'pause-song', payload })
     });
   }, [socket.current]);
 
+  useEffect(() => {
+    const payload = checkIsPartyMode.payload
+    if (!checkIsPartyMode) return
+    if (!isPartyMode) return
+    switch (checkIsPartyMode.on) {
+      case 'song-time':
+        onSeek(payload)
+        break;
+      case 'play-song':
+        onPlay(payload)
+        break;
+      case 'pause-song':
+        onStop(payload)
+        break;
+      default:
+        return console.log()
+    }
+  }, [checkIsPartyMode, isPartyMode]);
 
   useEffect(() => {
     if (!currSong) return
     setSontUrl(currSong.songUrlId);
-    setTotalTime(currSong.duration)
     setTotalTimeToDisplay(currSong.duration)
 
     if (currSong.isPlaying) {
@@ -90,27 +101,70 @@ const Player = () => {
 
   }, [currentMix]);
 
-  const handleProgress = (event) => {
-    // console.log('handleProgress' , event)
-    // if (!isSeeking)
-    setCurrTime(event.played)
-    setCurrTimeToDisplay(utilService.convertSecondsToTime(Math.floor(event.playedSeconds)));
-    // socket.current.emit('move-to', event);
+  const onSeek = async (payload) => {
+    const {song} = payload
+    const {time} = payload
+
+    const index = currentMix.songs.findIndex((item) => item.id === song.id);
+    let currentMixCopy = JSON.parse(JSON.stringify(currentMix));
+    let currentSongsCopy = JSON.parse(JSON.stringify(currentMix.songs));
+    let currentSongsCopyReset = currentSongsCopy.map(songItem => {
+      return {
+        ...songItem,
+        isPlaying: false
+      }
+    })
+
+    currentMixCopy.songs = currentSongsCopyReset
+    currentMixCopy.songs[index].isPlaying = true;
+    await dispatch(updateCurrentMix(currentMixCopy));
+
+    await dispatch(setCurrentSong(song))
+    youtubeRef.seekTo(time)
   }
 
-  // const handleSeekChange = (event) => {
-  //   const time = event.target.value
-  //   console.log('time',time)
-  //   // console.log('event',event)
-  //   setCurrTime(time)
-  //   youtubeRef.current.seekTo(parseFloat(time))
-  //   // setCurrTimeToDisplay(utilService.convertSecondsToTime(Math.floor(event.playedSeconds)));
-  //   socket.current.emit('move-to', event);
-  //   // setIsEmitSongTIme(true)
-  // }
+  const onPlay = async (song) => {
+    dispatch(setIsPlaying(true))
+    dispatch(setIsMuted(false))
 
-  const onSeek = (e) => {
-    console.log('onseek e', e)
+    const index = currentMix.songs.findIndex((item) => item.id === song.id);
+    let currentMixCopy = JSON.parse(JSON.stringify(currentMix));
+    let currentSongsCopy = JSON.parse(JSON.stringify(currentMix.songs));
+    let currentSongsCopyReset = currentSongsCopy.map(songItem => {
+      return {
+        ...songItem,
+        isPlaying: false
+      }
+    })
+
+    currentMixCopy.songs = currentSongsCopyReset
+    currentMixCopy.songs[index].isPlaying = true;
+    await dispatch(updateCurrentMix(currentMixCopy));
+
+    await dispatch(setCurrentSong(song))
+    await dispatch(setCurrentSongPlay())
+  }
+
+  const onStop = async (song) => {
+    dispatch(setIsPlaying(false))
+    dispatch(setIsMuted(true))
+
+    const index = currentMix.songs.findIndex((item) => item.id === song.id);
+    let currentMixCopy = JSON.parse(JSON.stringify(currentMix));
+    let currentSongsCopy = JSON.parse(JSON.stringify(currentMix.songs));
+    let currentSongsCopyReset = currentSongsCopy.map(songItem => {
+      return {
+        ...songItem,
+        isPlaying: false
+      }
+    })
+
+    currentMixCopy.songs = currentSongsCopyReset
+    currentMixCopy.songs[index].isPlaying = true;
+    await dispatch(updateCurrentMix(currentMixCopy));
+
+    await dispatch(setCurrentSong(song))
+    await dispatch(setCurrentSongPause())
   }
 
   const handleSeekMouseDown = e => {
@@ -123,65 +177,75 @@ const Player = () => {
 
   const handleSeekChange = (event) => {
     const time = event.target.value
-    youtubeRef.current.seekTo(parseFloat(time))
-    console.log('handleSeekChange', time)
-    socket.current.emit('move-to', time);
-
+    youtubeRef.seekTo(parseFloat(time))
+    let socketPayload = {
+      time: time,
+      song: currSong
+    }
+    socket.current.emit('move-to', socketPayload);
   }
 
-  const ended = (event) => {
+  const handleProgress = (event) => {
+    if (isSeeking) return
+    setCurrTime(event.played)
+    setCurrTimeToDisplay(utilService.convertSecondsToTime(Math.floor(event.playedSeconds)));
+    // socket.current.emit('move-to', event.played);
+  }
+
+  const ended = () => {
     autoPlayNextSong()
   }
 
-
   const handlePlaySong = async () => {
-    setIsPlaying(true)
-    setIsMuted(false)
+    dispatch(setIsPlaying(true))
+    dispatch(setIsMuted(false))
 
     const index = currentMix.songs.findIndex((item) => item.id === currSong.id);
     let currentMixCopy = JSON.parse(JSON.stringify(currentMix));
     let currentSongsCopy = JSON.parse(JSON.stringify(currentMix.songs));
-    let currentSongsCopyReset = currentSongsCopy.map(song => {
+    let currentSongsCopyReset = currentSongsCopy.map(songItem => {
       return {
-        ...song,
+        ...songItem,
         isPlaying: false
       }
     })
 
     currentMixCopy.songs = currentSongsCopyReset
     currentMixCopy.songs[index].isPlaying = true;
-    saveUpdateMixAndEmit(currentMixCopy);
+    await dispatch(updateCurrentMix(currentMixCopy));
 
     let songCopy = { ...currSong }
     songCopy.isPlaying = true
 
     await dispatch(setCurrentSongPlay())
+    // let socketPayload = {
+    //   song: songCopy,
+    //   isPartyMode: isPartyMode
+    // }
     socket.current.emit('set-song-playing', songCopy);
-
   };
 
   const handlePauseSong = async () => {
-    setIsPlaying(false)
-    setIsMuted(true)
+    dispatch(setIsPlaying(false))
+    dispatch(setIsMuted(true))
 
     const index = currentMix.songs.findIndex((item) => item.id === currSong.id);
     let currentMixCopy = JSON.parse(JSON.stringify(currentMix));
     let currentSongsCopy = JSON.parse(JSON.stringify(currentMix.songs));
-    let currentSongsCopyReset = currentSongsCopy.map(song => {
+    let currentSongsCopyReset = currentSongsCopy.map(songItem => {
       return {
-        ...song,
+        ...songItem,
         isPlaying: false
       }
     })
 
     currentMixCopy.songs = currentSongsCopyReset
     currentMixCopy.songs[index].isPlaying = false;
-    saveUpdateMixAndEmit(currentMixCopy)
+    await dispatch(updateCurrentMix(currentMixCopy));
 
     let songCopy = { ...currSong }
     songCopy.isPlaying = false
 
-    // await dispatch(setCurrentSong(songCopy))
     await dispatch(setCurrentSongPause())
     socket.current.emit('pause-song-playing', songCopy);
   }
@@ -226,9 +290,6 @@ const Player = () => {
       nextSongIdx = 0
     }
 
-    // let nextSongId = nextSong.songUrlId;
-    // setSontUrl(nextSongId)
-
     let songCopy = { ...nextSong }
     songCopy.isPlaying = true
     dispatch(setCurrentSong(songCopy))
@@ -238,7 +299,11 @@ const Player = () => {
     updatedMix.songs[nextSongIdx].isPlaying = true;
 
     saveUpdateMixAndEmit(updatedMix)
-    socket.current.emit('next-song', nextSong)
+    let socketPayload = {
+      song: nextSong,
+      isPartyMode: isPartyMode
+    }
+    socket.current.emit('next-song', socketPayload)
   }
 
   const onNextSong = () => {
@@ -258,22 +323,21 @@ const Player = () => {
   }
 
   const mute = () => {
-    setIsMuted(true)
+    dispatch(setIsMuted(true))
   }
 
   const unmute = () => {
-    setIsMuted(false)
-    setIsPlaying(true)
+    dispatch(setIsPlaying(true))
+    dispatch(setIsMuted(false))
   }
 
-  const play = () => {
-    setIsPlaying(true)
+  const handlePartyMode = () => {
+    dispatch(setIsPartyMode(!isPartyMode))
   }
 
   return (
     <section className="globalPlayer">
       {/* Join party mode */}
-      {isPlaying && <div className='modal' onClick={play}> </div>}
       <div className="global-player">
         <div className={currSong && currSong.isPlaying ? 'logo-playing' : 'logo-stop'}>
           <Link to="/">
@@ -283,6 +347,12 @@ const Player = () => {
             />
           </Link>
         </div>
+
+        <div>
+          {isPartyMode ? <span className='button' onClick={handlePartyMode}>PartyOn</span> :
+            <span className='button' onClick={handlePartyMode}>PartyOff</span>}
+        </div>
+
         <div className='sections-container'>
           <div className='section-up'>
             <div className="title-width">
@@ -303,7 +373,6 @@ const Player = () => {
               {totalTimeToDisplay ? <p>{totalTimeToDisplay}</p> : <p>00:00</p>}
             </div>
 
-
             <div className="step-btn">
               <button onClick={onPrevSong}>
                 <img src={Prev} />
@@ -315,10 +384,12 @@ const Player = () => {
                 <button onClick={handlePlaySong}>
                   <img src={Play} />
                 </button>}
+
               <button onClick={onNextSong}>
                 <img src={Next} />
               </button>
             </div>
+
             <div className="mute">
               <button onClick={mute}>
                 <img src={Mute} />
@@ -333,9 +404,11 @@ const Player = () => {
             </div>
 
           </div>
-          {songUrl && isPlaying && <>
+          <>
             <ReactPlayer
-              ref={youtubeRef}
+              // ref={youtubeRef}
+              // ref={(player) => youtubeRef = player}
+              ref={(player) => setYoutubeRef(player)}
               url={`https://www.youtube.com/watch?v=${songUrl}`}
               config={{
                 youtube: {
@@ -353,7 +426,7 @@ const Player = () => {
               height='0px'
               volume={volume}
               onSeek={e => onSeek(e)}
-              onProgress={handleProgress}
+              onProgress={(event) => handleProgress(event)}
               onEnded={ended}
               onError={e => console.log('onError', e)}
             // onDuration={handleSeekChange}
@@ -371,7 +444,8 @@ const Player = () => {
             // onBuffer={() => console.log('onBuffer')}
             // onPlaybackRateChange={this.handleOnPlaybackRateChange}
             // onPlaybackQualityChange={e => console.log('onPlaybackQualityChange', e)}
-            /></>}
+            /></>
+          {songUrl && isPlaying && <></>}
         </div>
       </div >
 

@@ -54,7 +54,6 @@ export const saveUpdateMix = (mix) => async (dispatch) => {
             const newMix = await mixService.save(mix);
             console.log('saveUpdateMix newMix', newMix._id)
             dispatch(setCurrentMix(newMix));
-
             // router.push(`/`)
             // router.push(`/mix/details/${newMix._id}`)
         } else {
@@ -117,8 +116,6 @@ const mixSlice = createSlice({
             state.mixs = action.payload
         },
         setMixUser: (state, action) => {
-            // let mixsCopy = [...state.mixs]
-
             let mixsCopy = JSON.parse(JSON.stringify(state.mixs))
             const user = action.payload
             const mixsUser = mixsCopy.filter(mix => mix.createdBy._id === user._id)
@@ -132,6 +129,7 @@ const mixSlice = createSlice({
             state.currentMix = state.newMix
         },
         updateCurrentMix: (state, action) => {
+            // console.log('updateCurrentMix',action.payload)
             state.currentMix = action.payload
         },
         setCurrentMix: (state, action) => {
@@ -157,9 +155,6 @@ const mixSlice = createSlice({
             });
             let resSliced = mixCopy.slice(0, 3);
             state.topMixes = resSliced;
-        },
-        setCurrentSongPlay: (state, action) => {
-            state.currSong = action.payload
         },
         setCurrentSongPause: (state, action) => {
             state.currSong = action.payload
