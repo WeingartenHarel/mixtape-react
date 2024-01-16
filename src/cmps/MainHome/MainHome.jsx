@@ -7,7 +7,6 @@ import MixListHomeUser from '../MixListHomeUser/MixListHomeUser';
 import MixPreview from '../MixPreview/MixPreview';
 import { setSortedMixes , setMixUser } from '../../store/slices/mixSlice';
 
-
 const MixHome = ({ mixs }) => {
     const dispatch = useDispatch();
     const { genres } = useSelector((state) => state.mixs);

@@ -1,7 +1,8 @@
 
 import axios from 'axios';
 
-const API_KEY = 'AIzaSyDMqx0m8tzNht1u0x_mzgjIZcsKU2ojh4E'
+const API_KEY = 'AIzaSyAQBGuEyFHycyZR__X7wLQmJ8LhEDCp3Bk'
+// AIzaSyDt14vq1kVZxoKQOn0br2HfdAM9GE9k5TE
 
 export const youTubeService = {
     query,

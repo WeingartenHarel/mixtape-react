@@ -1,7 +1,7 @@
 import Axios from 'axios';
 
 const BASE_URL = process.env.NODE_ENV === 'production'
-    ? '/api/'
+    ? 'http://mixtape.eu-north-1.elasticbeanstalk.com/api/'
     : '//localhost:3030/api/'
 
 
